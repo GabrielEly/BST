@@ -368,7 +368,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	}
     }
     
-    // Errado https://gist.github.com/fanyang88/2440274
+    // Errado
     public int depth(K key) {
     	if (isEmpty()) {
     		return -1;
@@ -377,25 +377,16 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     		return -1;
     	}
     	
-    	return depth(key, root, 0);
+    	return depth(key, root);
     }
-    private int depth(K key, Node node, int cont) {
-    	if (node == null) {
-    		return 0;
-    	}
-    	if (key.compareTo(node.key) == 0) {
-    		return cont;
-    	}
-    	else if (node.left != null) {
-    		cont++;
-    		return depth(key, node.left, cont);
-    	}
-    	else if (node.right != null) {
-    		cont++;
-    		return depth(key, node.right, cont);
-    	}
-    	
-    	return cont;
+    private int depth(K key, Node node) {
+    	int height1 = 0;
+	int height2 = 0;
+	if(root.left!=null)
+        	height1 = depth(key, root.left);
+	if(root.right!=null)
+	    	height2 = depth(key, root.right);
+	return Math.max(height1, height2) + 1;
     }
     
     // Errado
@@ -455,7 +446,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return string;
     }
     
-    // MÈtodo semelhante ao search, porÈm retorna o nÛ
+    // M√©todo semelhante ao search, por√©m retorna o n√≥
     public BinarySearchTree<K, V>.Node nodeSearch(K key) {
         return nodeSearch(root, key);
     }
@@ -470,6 +461,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
         return nodeSearch(node.next(key), key);
     }
     
+    // Gera uma String do n√≥
     public String getNodeString(K key) {
     	if (search(key) == null) {
     		return null;
