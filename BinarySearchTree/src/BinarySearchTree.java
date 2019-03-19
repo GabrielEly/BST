@@ -123,38 +123,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
         return true;
     }
     
-/*
- 	@Override
-    public boolean delete(K key) {
-       return deleteByMerging(key);
-    }
-    private boolean deleteByMerging(K key) {
-        Node parent = null, current = root;
-        for (; current != null && key.compareTo(current.key) != 0; parent = current, current = current.next(key));
-
-        if (current == null) 
-            return false;
-        else if (current.left != null && current.right != null) {
-            // Caso 3
-            Node tmp = current.left;                                     
-            while (tmp.right != null) tmp = tmp.right;                            
-            tmp.right = current.right;
-                
-            if (current.equals(root)) root = current.left;
-            else if (parent.left.equals(current)) parent.left = current.left;
-            else parent.right = current.left;
-        } else {
-            // Caso 1 ou Caso 2
-            Node nextNode = current.right == null ? current.left : current.right;
-            if (current.equals(root)) root = nextNode;
-            else if (parent.left.equals(current)) parent.left = nextNode;
-            else parent.right = nextNode;
-        }
-
-        return true;
-    }
-*/
-    
     @Override
     public void preOrder() {
        preOrder(root);
@@ -196,7 +164,18 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
        levelOrder(root);
     }
     private void levelOrder(Node node) {
-    	
+    	if (node != root) {
+    		Queue<Node> fila = new ArrayDeque<>();
+    		fila.add(node);
+    		while (!fila.isEmpty()) {
+    			Node current = fila.remove();
+    			System.out.print(current + " ");
+    			if (current.left != null)
+    				fila.add(current.left);
+    			if (current.right != null)
+    				fila.add(current.right);
+    		}
+    	}
     }
 
     public int countNodes() {
@@ -368,7 +347,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	}
     }
     
-    // Errado
     public int depth(K key) {
     	if (isEmpty()) {
     		return -1;
@@ -377,16 +355,22 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     		return -1;
     	}
     	
-    	return depth(key, root);
+    	return depth(key, root, 0);
     }
-    private int depth(K key, Node node) {
-    	int height1 = 0;
-	int height2 = 0;
-	if(root.left!=null)
-        	height1 = depth(key, root.left);
-	if(root.right!=null)
-	    	height2 = depth(key, root.right);
-	return Math.max(height1, height2) + 1;
+    private int depth(K key, Node node, int count) {
+    	if (node == null) 
+            return 0; 
+   
+        if (node.key == key) 
+            return count; 
+   
+        int level = depth(key, node.left, count+1); 
+        if (level != 0) 
+            return level; 
+   
+        level = depth(key, node.right, count+1); 
+        
+        return level;
     }
     
     // Errado
@@ -462,6 +446,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     }
     
     // Gera uma String do nó
+    // Iria ser usado para criar a String nos dois últimos métodos
     public String getNodeString(K key) {
     	if (search(key) == null) {
     		return null;
