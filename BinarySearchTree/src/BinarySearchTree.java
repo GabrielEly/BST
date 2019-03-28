@@ -1,3 +1,10 @@
+// Grupo 7
+// Gabriel Ely Konrath
+// Jorge Medeiros
+// William Azevedo de Castro
+
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearchTreeADT<K, V> {
     protected Node root;
@@ -178,6 +185,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	}
     }
 
+   // Método conta o número de nós existentes na árvore
     public int countNodes() {
     	if (isEmpty()) {
     		return 0;
@@ -186,6 +194,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return countNodes(root);
     }
     private int countNodes(Node node) {
+    	// Verifica se nó não é nulo, caso não seja, adiciona 1 na conta e avança para as próximas sub-árvores 
     	if (node != null) {
     		return 1 + countNodes(node.left) + countNodes(node.right);
     	}
@@ -193,6 +202,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return 0;
     }
     
+    // Método conta o número de nós internos, ou seja, os nós que não são a raiz nem as folhas
     public int countInternalNodes() {
     	if (isEmpty()) {
     		return 0;
@@ -204,6 +214,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	if (node == null) {
     		return 0;
     	}
+    	// Verifica se nó é folha ou raiz, caso não seja, adiciona 1 na conta e avança para as próximas sub-árvores
     	if (!node.isLeaf() && node != root) {
     		return 1 + countInternalNodes(node.left) +
     				   countInternalNodes(node.right);
@@ -212,6 +223,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return countInternalNodes(node.left) + countInternalNodes(node.right);
     }
     
+    // Método conta o número de folhas
     public int countLeaves() {
     	if (isEmpty()) {
     		return 0;
@@ -223,6 +235,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	if (node == null) {
     		return 0;
     	}
+    	// Verifica se nó é folha, caso positivo, conta + 1 e avança na árvore
     	if (node.isLeaf() && node != root) {
     		return 1 + countLeaves(node.left) +
     				   countLeaves(node.right);
@@ -231,10 +244,12 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return countLeaves(node.left) + countLeaves(node.right);
     }
     
+    // Método retorna o número de filhos de um nó
     public int degree(K key) {
     	if (isEmpty()) {
     		return -1;
     	}
+    	// Verifica se nó existe
     	if (search(key) == null) {
     		return -1;
     	}
@@ -245,6 +260,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	if (node == null) {
     		return 0;
     	}
+    	// Verifica se nó é igual a chave, caso seja, verifica quantos filhos ou sub-árvores esse nó possui 
     	if (key.compareTo(node.key) == 0) {
     		if (node.left == null && node.right == null) {
     			return 0;
@@ -260,6 +276,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return degree(key, node.left) + degree(key, node.right);
     }
     
+    // Método retorna o número máximo de grau existente na árvore
     public int degreeTree() {
     	if (isEmpty()) {
     		return -1;
@@ -268,6 +285,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return degreeTree(root, 0);
     }
     private int degreeTree(Node node, int maiorGrau) {
+    	// Verifica o maior grau existente na árvore e guarda o valor
     	if (node.left != null && node.right == null) {
 			maiorGrau = 1;
 			return degreeTree(node.left, maiorGrau);
@@ -284,6 +302,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return maiorGrau;
     }
     
+    // Método retorna a altura de um nó
     public int height(K key) {
     	if (isEmpty()) {
     		return -1;
@@ -296,19 +315,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return height(key, node);
     }
     private int height(K key, Node node) {
+    	// Verifica se há sub-árvores do nó
     	if (node.right == null && node.left == null) {
     		return 0;
     	}
     	
+    	// Variáveis para calcular altura das sub-árvores da direita e esquerda
     	int left = 0;
     	int right = 0;
     	
+    	// Verifica possibilidade de ir para a esquerda ou direita e conta a altura
     	if (node.left != null) {
 			left = height(key, node.left);
 		}
     	if (node.right != null) {	
 			right = height(key, node.right);
 		}
+    	
+    	// Verifica qual sub-árvore é maior
     	if(left > right) {
     		return left + 1;
     	}
@@ -318,6 +342,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	
     }
     
+    // Método calcula a maior altura da árvore inteira
     public int heightTree() {
     	if (isEmpty()) {
     		return -1;
@@ -326,19 +351,24 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return heightTree(root);
     }
     private int heightTree(Node node) {
+    	// Verifica se há possibilidade de ir para a esquerda ou direita
     	if (node.right == null && node.left == null) {
     		return 0;
     	}
     	
+    	// Variáveis para calcular tamanho da sub-árvore da direita e esquerda
     	int left = 0;
     	int right = 0;
     	
+    	// Verifica possibilidade de ir para a esquerda ou direita
     	if (node.left != null) {
 			left = heightTree(node.left);
 		}
     	if (node.right != null) {	
 			right = heightTree(node.right);
 		}
+    	
+    	// Verifica qual sub-árvore é maior e retorna o valor
     	if(left > right) {
     		return left + 1;
     	}
@@ -347,6 +377,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	}
     }
     
+    // Método calcula a profundidade de um nó
     public int depth(K key) {
     	if (isEmpty()) {
     		return -1;
@@ -358,22 +389,27 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	return depth(key, root, 0);
     }
     private int depth(K key, Node node, int count) {
+    	// Verifica se nó é nulo
     	if (node == null) 
             return 0; 
-   
+    	// Verifica se chegou no nó a ser contada a altura, caso positivo, retorna a altura
         if (node.key == key) 
             return count; 
    
-        int level = depth(key, node.left, count+1); 
-        if (level != 0) 
-            return level; 
-   
-        level = depth(key, node.right, count+1); 
+        // Verifica o nível de profundidade e vai contando a medida que desce para a esquerda e direita
+        int deep = depth(key, node.left, count+1); 
+        // Verifica se nó foi encontrado na sub-árvore da esquerda, caso encontrou, retorna o valor da profundidade
+        if (deep != 0) {
+            return deep;
+        }
         
-        return level;
+        // Caso o nó não foi encontrado na sub-árvore da esquerda, método procura na sub-árvore da direita
+        deep = depth(key, node.right, count+1); 
+        
+        return deep;
     }
     
-    // Errado
+    // Método retorna os ancestrais de um nó
     public String ancestors(K key) {
     	if (isEmpty()) {
     		return null;
@@ -381,29 +417,43 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	if (search(key) == null) {
     		return null;
     	}
-    	Node node = nodeSearch(key);
     	
-    	return ancestors(key, node);
-    }
-    private String ancestors(K key, Node node) {
-    	if (node == null) {
-    		return "";
-    	}
-    	if (node == root){
-            System.out.println(getNodeString(key));
-            return "";
-        }
-        System.out.print(root + " ");
-        if(node.next(key) == node.left)
-            ancestors(key, node.left);
-        
-        else
-            ancestors(key, node.right);
+    	Node node = root;
     	
-    	return "";
+    	return ancestors(key, node, key.toString());
     }
+    private String ancestors(K key, Node node, String concat) {
+	// Condições de saída
+	// Caso não exista o nó (não encontrada a chave)
+	if(node == null) {
+		return null;
+	}
+	// Se a chave passada é da raiz, não tem ancestrais
+	if(root.key == key) {
+		concat = "";
+		return "Esta chave não possui ancestrais";
+	}
+	// Concatena o valor do ancestral
+	concat += " " + node.toString();
+	// Verifica a direção
+	int dir = node.key.compareTo(key);
+	if(dir < 0) {
+		//Verifica se não é o final
+		if(key.compareTo(node.right.key) == 0) {
+			return concat;
+		}
+	}
+	if(dir > 0) {
+		//Verifica se não é o final
+		if(key.compareTo(node.left.key) == 0) {
+			return concat;
+		}
+	}
+			
+	return ancestors(key, node.next(key), concat);
+	}
     
-    // Errado
+    // Método retorna os descendentes de um nó
     public String descendents(K key) {
     	if (isEmpty()) {
     		return null;
@@ -411,23 +461,39 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
     	if (search(key) == null) {
     		return null;
     	}
+    	
+    	// Ao invés de começar o método pelo root, ele começa pelo nó recebido por parâmetro
     	Node node = nodeSearch(key);
     	
     	return descendents(key, node, "");
     }
-    private String descendents(K key, Node node, String string) {
+    private String descendents(K key, Node node, String concat) {
+    	if (node == null) {
+    		return concat;
+    	}
+    	// Verifica se nó possui filhos e se chegou ao fim da árvore, nesse caso retorna a string
     	if (node.right == null && node.left == null) {
-    		return string;
-    	}
-    	string += getNodeString(node.key) + " ";
-    	if (node.left != null) {
-    		descendents(key, node.left, string);
-    	}
-    	if (node.right != null) {
-    		descendents(key, node.right, string);
+    		if (concat != null) {
+    			concat += node.toString() + " ";
+    			return concat;
+    		}
+    		else {
+    			return "Esta chave não possui descendentes";
+    		}
     	}
     	
-    	return string;
+    	// Coloca valor do nó na string
+    	concat += node.toString() + " ";
+    	
+    	// Verifica se pode ir para a esquerda ou direita da árvore
+    	if (node.left != null) {
+    		concat = descendents(key, node.left, concat);
+    	}
+    	if (node.right != null) {
+    		concat = descendents(key, node.right, concat);
+    	}
+    	
+    	return concat;
     }
     
     // Método semelhante ao search, porém retorna o nó
@@ -438,20 +504,13 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements BinarySearc
         if (node == null) {
             return null;
         }
+        
+        // Ao invés de retornar o valor do nó, retorna o próprio nó 
         else if (key.compareTo(node.key) == 0) {
             return node;
         }
         
         return nodeSearch(node.next(key), key);
-    }
-    
-    // Gera uma String do nó
-    // Iria ser usado para criar a String nos dois últimos métodos
-    public String getNodeString(K key) {
-    	if (search(key) == null) {
-    		return null;
-    	}
-    	return "" + key;
     }
     
 }
